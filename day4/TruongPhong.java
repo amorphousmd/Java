@@ -2,7 +2,7 @@ package com.java.day4;
 
 public class TruongPhong extends LaoDong implements NghiepVu {
 	
-	private int luongNVQuanLy;
+	private int luongNVQuanLy = 0;
 	
 	public TruongPhong(String hoTen, String maSo, String soDienThoai, int soNgayLamViec) {
 		super(hoTen, maSo, soDienThoai, soNgayLamViec);
@@ -11,8 +11,9 @@ public class TruongPhong extends LaoDong implements NghiepVu {
 	}
 	
 	@Override
-	public void tinhLuong() {
+	public int tinhLuong() {
 		// TODO Auto-generated method stub
+		return this.getSoNgayLamViec() * this.getLuongMotNgay() + this.luongNVQuanLy * 100;
 		
 	}
 	public int getLuongNVQuanLy() {

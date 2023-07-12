@@ -12,8 +12,9 @@ public class GiamDoc extends LaoDong implements NghiepVu{
 	}
 	
 	@Override
-	public void tinhLuong() {
+	public int tinhLuong() {
 		// TODO Auto-generated method stub
+		return this.getSoNgayLamViec() * this.getLuongMotNgay();
 		
 	}
 	public double getCoPhan() {

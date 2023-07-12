@@ -15,6 +15,8 @@ public abstract class LaoDong {
 		this.soNgayLamViec = soNgayLamViec;
 	}
 	
+	public abstract int tinhLuong();
+	
 	public String getHoTen() {
 		return hoTen;
 	}
