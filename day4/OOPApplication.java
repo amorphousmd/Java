@@ -9,24 +9,24 @@ import java.util.Comparator;
 
 public class OOPApplication {
 	public static void main(String[] args) {
+        System.out.println("1. Nhập thông tin công ty");
+        System.out.println("2. Phân bổ Nhân viên vào Trưởng phòng");
+        System.out.println("3. Thêm, xóa thông tin một nhân sự");
+        System.out.println("4. Xuất ra thông tin toàn bộ người trong công ty");
+        System.out.println("5. Tính và xuất tổng lương cho toàn công ty");
+        System.out.println("6. Tìm Nhân viên thường có lương cao nhất");
+        System.out.println("7. Tìm Trưởng Phòng có số lượng nhân viên dưới quyền nhiều nhất");
+        System.out.println("8. Sắp xếp nhân viên toàn công ty theo thứ tự abc");
+        System.out.println("9. Sắp xếp nhân viên toàn công ty theo thứ tự lương giảm dần");
+        System.out.println("10. Tìm Giám Đốc có số lượng cổ phần nhiều nhất");
+        System.out.println("11. Tính và Xuất tổng THU NHẬP của từng Giám Đốc");
 		Scanner scanner = new Scanner(System.in);
 		CongTy congTy = new CongTy();
 		DataCenter dataCenter = new DataCenter();
 		int choice;
 		while (true) {
+			System.out.println("------------------------------------------------------------------");
             System.out.print("Lua chon (1-11): ");
-            System.out.println("1. Nhập thông tin công ty");
-            System.out.println("2. Phân bổ Nhân viên vào Trưởng phòng");
-            System.out.println("3. Thêm, xóa thông tin một nhân sự");
-            System.out.println("4. Xuất ra thông tin toàn bộ người trong công ty");
-            System.out.println("5. Tính và xuất tổng lương cho toàn công ty");
-            System.out.println("6. Tìm Nhân viên thường có lương cao nhất");
-            System.out.println("7. Tìm Trưởng Phòng có số lượng nhân viên dưới quyền nhiều nhất");
-            System.out.println("8. Sắp xếp nhân viên toàn công ty theo thứ tự abc");
-            System.out.println("9. Sắp xếp nhân viên toàn công ty theo thứ tự lương giảm dần");
-            System.out.println("10. Tìm Giám Đốc có số lượng cổ phần nhiều nhất");
-            System.out.println("11. Tính và Xuất tổng THU NHẬP của từng Giám Đốc");
-
             choice = scanner.nextInt();
             scanner.nextLine(); // Consume the remaining newline character
 
@@ -131,22 +131,24 @@ public class OOPApplication {
 		    NhanVien nhanVien = iteratorNV.next();
 		    String maSoNV = nhanVien.getMaSo();
 		    if (maSoNV.equals(maSoInputNV)) {
+		    	notFoundNV = false;
 		    	// Them Truong Phong
 		    	boolean notFoundTP = true;
 		        System.out.print("Nhap ma so truong phong muon gan: ");
 				String maSoInputTP = scanner.nextLine();
 				Iterator<TruongPhong> iteratorTP = dataCenter.getListTruongPhong().iterator();
-		        while (iteratorNV.hasNext()) {
+		        while (iteratorTP.hasNext()) {
 		        	TruongPhong truongPhong = iteratorTP.next();
 				    String maSoTP = truongPhong.getMaSo();
 				    if (maSoTP.equals(maSoInputTP)) {
-				    	truongPhong.setLuongNVQuanLy(truongPhong.getLuongNVQuanLy() + 1);
 				    	nhanVien.setTruongPhongQuanLy(truongPhong.getHoTen());
+				    	truongPhong.setNhanVienQuanLy(nhanVien);
+				    	return;
 				    }
-				    return;
 		        }
 		        if (notFoundTP) {
 					System.out.println("Khong co truong phong nao co ma so nhu vay");
+					return;
 				}
 		    }
 		}
@@ -225,6 +227,10 @@ public class OOPApplication {
 			System.out.println("Nhap co phan: ");
 			double coPhan = scanner.nextDouble();
 			scanner.nextLine();
+			if (coPhan > 100) {
+				System.out.println("Co phan khong the lon hon 100");
+				return;
+			}
 			GiamDoc giamDoc = new GiamDoc(hoTen, maSo, soDienThoai, soNgayLamViec, coPhan);
 			dataCenter.getListLaoDong().add(giamDoc);
 			dataCenter.getListGiamDoc().add(giamDoc);
@@ -257,6 +263,9 @@ public class OOPApplication {
 		}
 		if (notDeleted) {
 			System.out.println("Khong co nhan vien nao co ma so nhu vay");
+		}
+		else {
+			System.out.println("Da xoa nhan vien co ma so: " + maSoInput);
 		}
 	}
 	
@@ -320,23 +329,24 @@ public class OOPApplication {
 	}
 	
 	public static void option6(DataCenter dataCenter) {
-		LaoDong laoDongMaxLuong = dataCenter.getListLaoDong().get(0);
-		for (int i = 0; i < dataCenter.getListLaoDong().size(); i++) {
-			if (laoDongMaxLuong.tinhLuong() < dataCenter.getListLaoDong().get(i).tinhLuong()) {
-				laoDongMaxLuong = dataCenter.getListLaoDong().get(i);
+		LaoDong nhanVienMaxLuong = dataCenter.getListNhanVien().get(0);
+		for (int i = 0; i < dataCenter.getListNhanVien().size(); i++) {
+			if (nhanVienMaxLuong.tinhLuong() < dataCenter.getListNhanVien().get(i).tinhLuong()) {
+				nhanVienMaxLuong = dataCenter.getListNhanVien().get(i);
 			}
 		}
-		System.out.println("Lao dong luong cao nhat cong ty: ");
-		System.out.print("Ho Ten: " + laoDongMaxLuong.getHoTen() + " ");
-		System.out.print("Ma So: " + laoDongMaxLuong.getMaSo() + " ");
-		System.out.print("So Dien Thoai: " + laoDongMaxLuong.getSoDienThoai() + " ");
-		System.out.print("So ngay lam viec: " + laoDongMaxLuong.getSoNgayLamViec() + " ");
+		System.out.println("Nhan vien luong cao nhat cong ty: ");
+		System.out.print("Ho Ten: " + nhanVienMaxLuong.getHoTen() + " ");
+		System.out.print("Ma So: " + nhanVienMaxLuong.getMaSo() + " ");
+		System.out.print("So Dien Thoai: " + nhanVienMaxLuong.getSoDienThoai() + " ");
+		System.out.print("So ngay lam viec: " + nhanVienMaxLuong.getSoNgayLamViec() + " ");
+		System.out.print("Luong nhan vien: " + nhanVienMaxLuong.tinhLuong() + " ");
 	}
 	
 	public static void option7(DataCenter dataCenter) {
 		TruongPhong truongPhongMaxNV = dataCenter.getListTruongPhong().get(0);
 		for (int i = 0; i < dataCenter.getListTruongPhong().size(); i++) {
-			if (truongPhongMaxNV.getLuongNVQuanLy() < dataCenter.getListTruongPhong().get(i).getLuongMotNgay()) {
+			if (truongPhongMaxNV.getLuongNVQuanLy() < dataCenter.getListTruongPhong().get(i).getLuongNVQuanLy()) {
 				truongPhongMaxNV = dataCenter.getListTruongPhong().get(i);
 			}
 		}
@@ -345,6 +355,7 @@ public class OOPApplication {
 		System.out.print("Ma So: " + truongPhongMaxNV.getMaSo() + " ");
 		System.out.print("So Dien Thoai: " + truongPhongMaxNV.getSoDienThoai() + " ");
 		System.out.print("So ngay lam viec: " + truongPhongMaxNV.getSoNgayLamViec() + " ");
+		System.out.println("So luong nhan vien quan ly: " + truongPhongMaxNV.getLuongNVQuanLy() + " ");
 	}
 	
 	public static void option8(DataCenter dataCenter) {
@@ -361,7 +372,7 @@ public class OOPApplication {
 	public static ArrayList<LaoDong> option8Sort(ArrayList<LaoDong> list) {
         ArrayList<LaoDong> sortedList = new ArrayList<>(list);
 
-        // Sort the ArrayList based on name using a custom comparator
+        // Overwrite the compare function for object sort
         Collections.sort(sortedList, new Comparator<LaoDong>() {
             @Override
             public int compare(LaoDong obj1, LaoDong obj2) {
@@ -386,21 +397,20 @@ public class OOPApplication {
 	
 	public static ArrayList<LaoDong> option9Sort(ArrayList<LaoDong> list) {
         ArrayList<LaoDong> sortedList = new ArrayList<>(list);
-
-        // Sort the ArrayList based on name using a custom comparator
+        
+        // Overwrite the compare function for object sort
         Collections.sort(sortedList, new Comparator<LaoDong>() {
             @Override
             public int compare(LaoDong obj1, LaoDong obj2) {
-                // Implement the comparison logic based on tinhLuong() result
                 int luong1 = obj1.tinhLuong();
                 int luong2 = obj2.tinhLuong();
 
                 if (luong1 < luong2) {
-                    return -1;  // obj1 comes before obj2
+                    return -1;
                 } else if (luong1 > luong2) {
-                    return 1;   // obj1 comes after obj2
+                    return 1;
                 } else {
-                    return 0;   // obj1 and obj2 have the same order
+                    return 0;
                 }
             }
         });
@@ -422,6 +432,7 @@ public class OOPApplication {
 		System.out.print("Ma So: " + giamDocMax.getMaSo() + " ");
 		System.out.print("So Dien Thoai: " + giamDocMax.getSoDienThoai() + " ");
 		System.out.print("So ngay lam viec: " + giamDocMax.getSoNgayLamViec() + " ");
+		System.out.println("Co phan: " + giamDocMax.getCoPhan());
 	}
 	
 	public static void option11(DataCenter dataCenter, CongTy congTy) {
@@ -431,12 +442,13 @@ public class OOPApplication {
 		}
 		int loiNhuanCongTy = congTy.getDoanhThuThang() - tongLuongCongTy;
 		for (int i = 0; i < dataCenter.getListGiamDoc().size(); i++) {
+			System.out.println("Thu nhap cua tung giam doc: ");
 			GiamDoc giamDoc = dataCenter.getListGiamDoc().get(i);
 			System.out.print("Ho Ten: " + giamDoc.getHoTen() + " ");
 			System.out.print("Ma So: " + giamDoc.getMaSo() + " ");
 			System.out.print("So Dien Thoai: " + giamDoc.getSoDienThoai() + " ");
 			System.out.print("So ngay lam viec: " + giamDoc.getSoNgayLamViec() + " ");
-			System.out.println("Thu Nhap: " + (giamDoc.tinhLuong() + giamDoc.getCoPhan() * loiNhuanCongTy));
+			System.out.println("Thu Nhap: " + (giamDoc.tinhLuong() + giamDoc.getCoPhan() / 100 * loiNhuanCongTy));
 		}
 	}
 }

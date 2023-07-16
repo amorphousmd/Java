@@ -30,10 +30,8 @@ public class SinhVien {
 		this.chuyenNganh = scanner.nextLine();
 		System.out.print("Nhap diem giua ky: ");
 		this.diemGiuaKy = scanner.nextDouble();
-		scanner.nextLine();
 		System.out.print("Nhap diem cuoi ky: ");
-		this.diemGiuaKy = scanner.nextDouble();
-		scanner.nextLine();
+		this.diemCuoiKy = scanner.nextDouble();
 		scanner.close();
 	}
 	
