@@ -1,0 +1,85 @@
+CREATE DATABASE QLBanSach;
+
+USE QLBanSach;
+
+CREATE TABLE DonHang(
+	MaDonHang INT AUTO_INCREMENT,
+	DaThanhToan BIT,
+	NgayGiao DATETIME,
+	NgayDat DATETIME,
+	TinhTrangGH VARCHAR(50),
+	PRIMARY KEY(MaDonHang)
+);
+
+CREATE TABLE TacGia(
+	MaTacGia INT AUTO_INCREMENT,
+	TenTacGia VARCHAR(200),
+	DiaChi VARCHAR(100),
+	TieuSu TEXT,
+	DienThoai VARCHAR(11),
+	PRIMARY KEY(MaTacGia)
+);
+
+CREATE TABLE Sach(
+	MaSach INT AUTO_INCREMENT,
+	TenSach VARCHAR(200),
+	GiaBan INT,
+	MoTa TEXT,
+	AnhBia BLOB,
+	NgayCapNhat DATETIME,
+	LuongTon INT,
+	PRIMARY KEY(MaSach)
+);
+
+CREATE TABLE KhachHang(
+	MaKH INT AUTO_INCREMENT,
+	TaiKhoan VARCHAR(100),
+	MatKhau VARCHAR(100),
+	Email VARCHAR(200),
+	DiaChi VARCHAR(100),
+	DienThoai VARCHAR(11),
+	GioiTinh VARCHAR(4),
+	NgaySinh DATETIME,
+	HoTen VARCHAR(200),
+	MaDonHang INT,
+	PRIMARY KEY(MaKH),
+	FOREIGN KEY(MaDonHang) REFERENCES DonHang(MaDonHang) 
+);
+
+CREATE TABLE NhaXuatBan(
+	MaNXB INT AUTO_INCREMENT,
+	TenNSB VARCHAR(200),
+	DiaChi VARCHAR(100),
+	DienThoai VARCHAR(11),
+	MaSach INT,
+	PRIMARY KEY(MaNXB),
+	FOREIGN KEY(MaSach) REFERENCES Sach(MaSach) 
+);
+
+CREATE TABLE ChuDe(
+	MaChuDe INT AUTO_INCREMENT,
+	TenChuDe VARCHAR(100),
+	MaSach INT,
+	PRIMARY KEY(MaChuDe),
+	FOREIGN KEY(MaSach) REFERENCES Sach(MaSach) 
+);
+
+CREATE TABLE DonHang_Sach (
+    MaDonHang INT,
+    MaSach INT,
+    SoLuong INT,
+    DonGia INT,
+    PRIMARY KEY (MaDonHang, MaSach),
+    FOREIGN KEY (MaDonHang) REFERENCES DonHang(MaDonHang),
+    FOREIGN KEY (MaSach) REFERENCES Sach(MaSach)
+);
+
+CREATE TABLE TacGia_Sach (
+    MaTacGia INT,
+    MaSach INT,
+    VaiTro VARCHAR(255),
+    ViTri VARCHAR(255),
+    PRIMARY KEY (MaTacGia, MaSach),
+    FOREIGN KEY (MaTacGia) REFERENCES TacGia(MaTacGia),
+    FOREIGN KEY (MaSach) REFERENCES Sach(MaSach)
+);
