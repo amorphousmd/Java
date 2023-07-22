@@ -2,13 +2,44 @@ CREATE DATABASE QLBanSach;
 
 USE QLBanSach;
 
+CREATE TABLE KhachHang(
+	MaKH INT AUTO_INCREMENT,
+	TaiKhoan VARCHAR(100),
+	MatKhau VARCHAR(100),
+	Email VARCHAR(200),
+	DiaChi VARCHAR(100),
+	DienThoai VARCHAR(11),
+	GioiTinh VARCHAR(4),
+	NgaySinh DATETIME,
+	HoTen VARCHAR(200),
+	PRIMARY KEY(MaKH)
+);
+
+CREATE TABLE NhaXuatBan(
+	MaNXB INT AUTO_INCREMENT,
+	TenNSB VARCHAR(200),
+	DiaChi VARCHAR(100),
+	DienThoai VARCHAR(11),
+	MaSach INT,
+	PRIMARY KEY(MaNXB)
+);
+
+CREATE TABLE ChuDe(
+	MaChuDe INT AUTO_INCREMENT,
+	TenChuDe VARCHAR(100),
+	MaSach INT,
+	PRIMARY KEY(MaChuDe)
+);
+
 CREATE TABLE DonHang(
 	MaDonHang INT AUTO_INCREMENT,
 	DaThanhToan BIT,
 	NgayGiao DATETIME,
 	NgayDat DATETIME,
 	TinhTrangGH VARCHAR(50),
-	PRIMARY KEY(MaDonHang)
+	MaKhachHang INT,
+	PRIMARY KEY(MaDonHang),
+	CONSTRAINT FK_MaKhachHang_DonHang FOREIGN KEY(MaKhachHang) REFERENCES KhachHang(MaKH)
 );
 
 CREATE TABLE TacGia(
@@ -28,40 +59,11 @@ CREATE TABLE Sach(
 	AnhBia BLOB,
 	NgayCapNhat DATETIME,
 	LuongTon INT,
-	PRIMARY KEY(MaSach)
-);
-
-CREATE TABLE KhachHang(
-	MaKH INT AUTO_INCREMENT,
-	TaiKhoan VARCHAR(100),
-	MatKhau VARCHAR(100),
-	Email VARCHAR(200),
-	DiaChi VARCHAR(100),
-	DienThoai VARCHAR(11),
-	GioiTinh VARCHAR(4),
-	NgaySinh DATETIME,
-	HoTen VARCHAR(200),
-	MaDonHang INT,
-	PRIMARY KEY(MaKH),
-	FOREIGN KEY(MaDonHang) REFERENCES DonHang(MaDonHang) 
-);
-
-CREATE TABLE NhaXuatBan(
-	MaNXB INT AUTO_INCREMENT,
-	TenNSB VARCHAR(200),
-	DiaChi VARCHAR(100),
-	DienThoai VARCHAR(11),
-	MaSach INT,
-	PRIMARY KEY(MaNXB),
-	FOREIGN KEY(MaSach) REFERENCES Sach(MaSach) 
-);
-
-CREATE TABLE ChuDe(
-	MaChuDe INT AUTO_INCREMENT,
-	TenChuDe VARCHAR(100),
-	MaSach INT,
-	PRIMARY KEY(MaChuDe),
-	FOREIGN KEY(MaSach) REFERENCES Sach(MaSach) 
+	MaChuDe INT,
+	MaNXB INT,
+	PRIMARY KEY(MaSach),
+	CONSTRAINT FK_MaChuDe_Sach FOREIGN KEY(MaChuDe) REFERENCES Chude(MaChuDe),
+	CONSTRAINT FK_MaNXB_Sach FOREIGN KEY(MaNXB) REFERENCES NhaXuatBan(MaNXB)
 );
 
 CREATE TABLE DonHang_Sach (
@@ -70,8 +72,8 @@ CREATE TABLE DonHang_Sach (
     SoLuong INT,
     DonGia INT,
     PRIMARY KEY (MaDonHang, MaSach),
-    FOREIGN KEY (MaDonHang) REFERENCES DonHang(MaDonHang),
-    FOREIGN KEY (MaSach) REFERENCES Sach(MaSach)
+    CONSTRAINT FK_MaDonHang_Donhang_Sach FOREIGN KEY (MaDonHang) REFERENCES DonHang(MaDonHang),
+    CONSTRAINT FK_MaSach_Donhang_Sach FOREIGN KEY (MaSach) REFERENCES Sach(MaSach)
 );
 
 CREATE TABLE TacGia_Sach (
@@ -80,6 +82,6 @@ CREATE TABLE TacGia_Sach (
     VaiTro VARCHAR(255),
     ViTri VARCHAR(255),
     PRIMARY KEY (MaTacGia, MaSach),
-    FOREIGN KEY (MaTacGia) REFERENCES TacGia(MaTacGia),
-    FOREIGN KEY (MaSach) REFERENCES Sach(MaSach)
+    CONSTRAINT FK_MaTacGia_TacGia_Sach FOREIGN KEY (MaTacGia) REFERENCES TacGia(MaTacGia),
+    CONSTRAINT FK_MaSach_TacGia_Sach FOREIGN KEY (MaSach) REFERENCES Sach(MaSach)
 );
